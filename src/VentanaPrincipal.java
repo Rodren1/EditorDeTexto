@@ -158,6 +158,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jDialogAbrir.setVisible(false);
         jDialogArchivoMostrado.setVisible(true);
        
+        
     }//GEN-LAST:event_AbrirMousePressed
 
     /**
