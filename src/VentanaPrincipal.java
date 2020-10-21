@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -39,6 +40,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         textPanelAbrir = new javax.swing.JTextPane();
         jPanel1 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextPane1 = new javax.swing.JTextPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         Abrir = new javax.swing.JMenuItem();
@@ -81,15 +84,17 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jScrollPane2.setViewportView(jTextPane1);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 711, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 711, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 408, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)
         );
 
         jMenu1.setText("File");
@@ -134,31 +139,49 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void AbrirMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AbrirMousePressed
         jDialogAbrir.setVisible(true); //muestra el dialog con el jFileChooser
+
+        //con esto solo se podran mostrar archivos txt y xml
+        jFileChooserAbrir.setFileFilter(new FileNameExtensionFilter("arhivos de texto txt", "txt"));
+        jFileChooserAbrir.setFileFilter(new FileNameExtensionFilter("arhivos de imagen xml", "xml"));
+
         JFileChooser selectorArchivos = new JFileChooser();
         // indica cual fue la accion de usuario sobre el jfilechooser
         int resultado = selectorArchivos.showOpenDialog(this);
 
         File archivo = selectorArchivos.getSelectedFile(); // obtiene el archivo seleccionado
-        StringBuilder lectura = new StringBuilder(); //creo un StringBuilder para guardar las lineas que se leen en el while
-        try {
-            BufferedReader br = new BufferedReader (new FileReader(archivo));
-            String linea = br.readLine();
-            while (linea != null) {
-                lectura.append(linea).append("\n"); //le voy añadiendo las lineas con salto de linea
-                linea = br.readLine();
-            }
-            String resul = lectura.toString(); //cambio el StringBuilder a String para pasarselo al textPanel
-            textPanelAbrir.setText(resul);
-            br.close();
-        } catch (FileNotFoundException e) {
-            textPanelAbrir.setText("Fichero no encontrado");
-        } catch (Exception e) {
-            textPanelAbrir.setText("Error en la lectura del fichero");
-        }
-        jDialogAbrir.setVisible(false);
-        jDialogArchivoMostrado.setVisible(true);
-       
         
+        StringBuilder lectura = new StringBuilder(); //creo un StringBuilder para guardar las lineas que se leen en el while
+        
+        String nombre = archivo.getName(); //obtengo el nombre del archivo completo para comprobar su extension
+        
+        String extension = nombre.substring(nombre.lastIndexOf('.') + 1, nombre.length()); //separo la extension del nombre para usarla en el if
+        
+        if (extension.equalsIgnoreCase("txt") || extension.equalsIgnoreCase("xml")) { //solo si la extension es xml o txt entrara en el try
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(archivo));
+                String linea = br.readLine();
+                while (linea != null) {
+                    lectura.append(linea).append("\n"); //le voy añadiendo las lineas con salto de linea
+                    linea = br.readLine();
+                }
+                String resul = lectura.toString(); //cambio el StringBuilder a String para pasarselo al textPanel
+                textPanelAbrir.setText(resul);
+                br.close();
+            } catch (FileNotFoundException e) {
+                textPanelAbrir.setText("Fichero no encontrado");
+            } catch (Exception e) {
+                textPanelAbrir.setText("Error en la lectura del fichero");
+            }
+
+            jDialogAbrir.setVisible(false);
+            jDialogArchivoMostrado.setVisible(true);
+            
+        } else {
+            jDialogAbrir.setVisible(false);
+            jDialogArchivoMostrado.setVisible(true);
+            textPanelAbrir.setText("Extensión del archivo no válida");
+        }
+
     }//GEN-LAST:event_AbrirMousePressed
 
     /**
@@ -207,6 +230,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextPane jTextPane1;
     private javax.swing.JTextPane textPanelAbrir;
     // End of variables declaration//GEN-END:variables
 }
