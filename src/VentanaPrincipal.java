@@ -1,8 +1,11 @@
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -36,12 +39,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         jDialogAbrir = new javax.swing.JDialog();
         jFileChooserAbrir = new javax.swing.JFileChooser();
-        jDialogArchivoMostrado = new javax.swing.JDialog();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        textPanelAbrir = new javax.swing.JTextPane();
-        jPanel1 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
+        jDialogGuardar = new javax.swing.JDialog();
+        jFileChooserGuardar = new javax.swing.JFileChooser();
+        jTextAreaEscritura = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         Abrir = new javax.swing.JMenuItem();
@@ -61,41 +61,29 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             .addComponent(jFileChooserAbrir, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
         );
 
-        jDialogArchivoMostrado.setSize(new java.awt.Dimension(723, 420));
+        jDialogGuardar.setSize(new java.awt.Dimension(723, 420));
 
-        jScrollPane1.setViewportView(textPanelAbrir);
-
-        javax.swing.GroupLayout jDialogArchivoMostradoLayout = new javax.swing.GroupLayout(jDialogArchivoMostrado.getContentPane());
-        jDialogArchivoMostrado.getContentPane().setLayout(jDialogArchivoMostradoLayout);
-        jDialogArchivoMostradoLayout.setHorizontalGroup(
-            jDialogArchivoMostradoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialogArchivoMostradoLayout.createSequentialGroup()
+        javax.swing.GroupLayout jDialogGuardarLayout = new javax.swing.GroupLayout(jDialogGuardar.getContentPane());
+        jDialogGuardar.getContentPane().setLayout(jDialogGuardarLayout);
+        jDialogGuardarLayout.setHorizontalGroup(
+            jDialogGuardarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialogGuardarLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 699, Short.MAX_VALUE)
+                .addComponent(jFileChooserGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, 711, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        jDialogArchivoMostradoLayout.setVerticalGroup(
-            jDialogArchivoMostradoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialogArchivoMostradoLayout.createSequentialGroup()
+        jDialogGuardarLayout.setVerticalGroup(
+            jDialogGuardarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialogGuardarLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 396, Short.MAX_VALUE)
+                .addComponent(jFileChooserGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jScrollPane2.setViewportView(jTextPane1);
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 711, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)
-        );
+        jTextAreaEscritura.setColumns(20);
+        jTextAreaEscritura.setRows(5);
 
         jMenu1.setText("File");
 
@@ -108,9 +96,19 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jMenu1.add(Abrir);
 
         Guardar.setText("Guardar");
+        Guardar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                GuardarMousePressed(evt);
+            }
+        });
         jMenu1.add(Guardar);
 
         GuardarComo.setText("Guardar como..");
+        GuardarComo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                GuardarComoMousePressed(evt);
+            }
+        });
         jMenu1.add(GuardarComo);
 
         jMenuBar1.add(jMenu1);
@@ -122,67 +120,95 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(0, 7, Short.MAX_VALUE)
+                .addComponent(jTextAreaEscritura, javax.swing.GroupLayout.PREFERRED_SIZE, 708, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 8, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(0, 4, Short.MAX_VALUE)
+                .addComponent(jTextAreaEscritura, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 5, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void AbrirMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AbrirMousePressed
-        jDialogAbrir.setVisible(true); //muestra el dialog con el jFileChooser
-
-        //con esto solo se podran mostrar archivos txt y xml
-        jFileChooserAbrir.setFileFilter(new FileNameExtensionFilter("arhivos de texto txt", "txt"));
-        jFileChooserAbrir.setFileFilter(new FileNameExtensionFilter("arhivos de imagen xml", "xml"));
-
-        JFileChooser selectorArchivos = new JFileChooser();
-        // indica cual fue la accion de usuario sobre el jfilechooser
-        int resultado = selectorArchivos.showOpenDialog(this);
-
-        File archivo = selectorArchivos.getSelectedFile(); // obtiene el archivo seleccionado
-        
-        StringBuilder lectura = new StringBuilder(); //creo un StringBuilder para guardar las lineas que se leen en el while
-        
-        String nombre = archivo.getName(); //obtengo el nombre del archivo completo para comprobar su extension
-        
-        String extension = nombre.substring(nombre.lastIndexOf('.') + 1, nombre.length()); //separo la extension del nombre para usarla en el if
-        
-        if (extension.equalsIgnoreCase("txt") || extension.equalsIgnoreCase("xml")) { //solo si la extension es xml o txt entrara en el try
-            try {
-                BufferedReader br = new BufferedReader(new FileReader(archivo));
-                String linea = br.readLine();
-                while (linea != null) {
-                    lectura.append(linea).append("\n"); //le voy añadiendo las lineas con salto de linea
-                    linea = br.readLine();
+        int seleccion = jFileChooserAbrir.showOpenDialog(this);  // indica cual fue la accion de usuario sobre el jfilechooser
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
+            File fichero = jFileChooserAbrir.getSelectedFile(); // obtiene el archivo seleccionado
+            StringBuilder lectura = new StringBuilder(); //creo un StringBuilder para guardar las lineas que se leen en el while
+            String nombre = fichero.getName(); //obtengo el nombre del archivo completo para comprobar su extension
+            String extension = nombre.substring(nombre.lastIndexOf('.') + 1, nombre.length()); //separo la extension del nombre para usarla en el if
+            if (extension.equalsIgnoreCase("txt") || extension.equalsIgnoreCase("xml")) { //solo si la extension es xml o txt entrara en el try
+                try {
+                    BufferedReader br = new BufferedReader(new FileReader(fichero));
+                    String linea = br.readLine();
+                    while (linea != null) {
+                        lectura.append(linea).append("\n"); //le voy añadiendo las lineas con salto de linea
+                        linea = br.readLine();
+                    }
+                    String resul = lectura.toString(); //cambio el StringBuilder a String para pasarselo al textArea
+                    jTextAreaEscritura.setText(resul);
+                    br.close();
+                } catch (FileNotFoundException e) {
+                    jTextAreaEscritura.setText("Fichero no encontrado");
+                } catch (Exception e) {
+                    jTextAreaEscritura.setText("Error en la lectura del fichero");
                 }
-                String resul = lectura.toString(); //cambio el StringBuilder a String para pasarselo al textPanel
-                textPanelAbrir.setText(resul);
-                br.close();
-            } catch (FileNotFoundException e) {
-                textPanelAbrir.setText("Fichero no encontrado");
-            } catch (Exception e) {
-                textPanelAbrir.setText("Error en la lectura del fichero");
+            } else {
+                jTextAreaEscritura.setText("Extensión del archivo no válida");
             }
-
-            jDialogAbrir.setVisible(false);
-            jDialogArchivoMostrado.setVisible(true);
-            
-        } else {
-            jDialogAbrir.setVisible(false);
-            jDialogArchivoMostrado.setVisible(true);
-            textPanelAbrir.setText("Extensión del archivo no válida");
+        }else {
+            jFileChooserAbrir.cancelSelection();
         }
 
+
     }//GEN-LAST:event_AbrirMousePressed
+
+    private void GuardarComoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GuardarComoMousePressed
+        int seleccion = jFileChooserGuardar.showSaveDialog(this);
+
+        if (seleccion == JFileChooser.APPROVE_OPTION) {             //si entra aqui es pq el usuario ha pulsado en "guardar"
+            File fichero = jFileChooserGuardar.getSelectedFile();
+            String nombre = fichero.getName();                   //creo una variable que recibe el nombre del fichero
+            String extension = nombre.substring(nombre.lastIndexOf('.') + 1, nombre.length()); //creo una variable con la extension del fichero
+
+            String texto = jTextAreaEscritura.getText(); //creo una variable que guarda el texto
+            if (extension.equalsIgnoreCase("txt") || extension.equalsIgnoreCase("xml")) { //con la variable que guarda la extension entro en el if para que 
+                //solo se guarden los archivos txt y xml
+                try {
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(fichero));
+                    bw.write(texto);
+                    bw.close();
+                } catch (IOException e) {
+                    jTextAreaEscritura.setText("Error en la escritura del fichero");
+                }
+            } else {
+                jTextAreaEscritura.setText("Extension no válida");
+            }
+        } else {
+            jFileChooserGuardar.cancelSelection();
+        }
+
+
+    }//GEN-LAST:event_GuardarComoMousePressed
+
+    private void GuardarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GuardarMousePressed
+        
+            File fichero = jFileChooserAbrir.getSelectedFile();
+            String archivo = fichero.getPath();
+            String texto = jTextAreaEscritura.getText();
+            try {
+                BufferedWriter bw = new BufferedWriter(new FileWriter(archivo));
+                bw.write(texto);
+                bw.close();
+            } catch (IOException e) {
+                jTextAreaEscritura.setText("Error en la escritura del fichero");
+            }
+    }//GEN-LAST:event_GuardarMousePressed
 
     /**
      * @param args the command line arguments
@@ -198,16 +224,24 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VentanaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VentanaPrincipal.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VentanaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VentanaPrincipal.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VentanaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VentanaPrincipal.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VentanaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VentanaPrincipal.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -224,14 +258,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem Guardar;
     private javax.swing.JMenuItem GuardarComo;
     private javax.swing.JDialog jDialogAbrir;
-    private javax.swing.JDialog jDialogArchivoMostrado;
+    private javax.swing.JDialog jDialogGuardar;
     private javax.swing.JFileChooser jFileChooserAbrir;
+    private javax.swing.JFileChooser jFileChooserGuardar;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextPane jTextPane1;
-    private javax.swing.JTextPane textPanelAbrir;
+    private javax.swing.JTextArea jTextAreaEscritura;
     // End of variables declaration//GEN-END:variables
 }
